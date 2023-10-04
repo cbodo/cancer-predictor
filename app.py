@@ -1,6 +1,7 @@
 from flask import Flask
 from flask import render_template
 from textbox import TextBox
+from predictor import generate_attribute_value
 
 app = Flask(__name__, template_folder='template')
 
@@ -30,3 +31,9 @@ def background():
 @app.route("/about/")
 def about():
     return render_template('about.html')
+
+@app.route("/random/")
+def get_values():
+    for textbox in textboxes:
+        textbox.value = generate_attribute_value(textbox.name)
+    return render_template('index.html', textboxes=textboxes)

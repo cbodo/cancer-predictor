@@ -1,4 +1,28 @@
 {% extends 'base.html' %}
 {% block content %}
-  <h1>{% block title %} About {% endblock %}</h1>
+    <h1>{% block title %} About {% endblock %}</h1>
+    <p>
+        Cancer Cell Predictor was designed and developed as an interface prototype for a machine learning model. The machine learning model behind the 
+        interface uses linear regression to predict whether a cancer cell is benign or malignant. 
+        Since the app is only intended to show how a potential user interface might work in an industry environment (i.e. medical labs, 
+        clinics, etc.), it is not fully functional. An end-user version would allow for real data input and might include additional input fields.
+    </p>
+    <p>
+        The data used to train this model was sourced from the following publicly available dataset: <a href="https://www.kaggle.com/datasets/erdemtaha/cancer-data/data">https://www.kaggle.com/datasets/erdemtaha/cancer-data/data</a>.
+    </p>
+    <p>This project was originally developed as a Jupyter Notebook. A link to that Notebook on GitHub is listed below.</p>
+    <table class="about-table">
+        <tr>
+            <td style="padding-right: 1vw">Created By:</td>
+            <td><a href="mailto:craigmbodo@gmail.com">Craig Bodo</a></td>
+        </tr>
+        <tr>
+            <td style="padding-right: 1vw">GitHub/Notebook:</td>
+            <td><a href="https://github.com/cbodo/ml-malignancy-predictor">https://github.com/cbodo/ml-malignancy-predictor</a></td>
+        </tr>
+        <tr>
+            <td style="padding-right: 1vw">Github/Web App:</td>
+            <td><a href="https://github.com/cbodo/cancer-predictor">https://github.com/cbodo/cancer-predictor</a></td>
+        </tr>
+    </table>
 {% endblock %}

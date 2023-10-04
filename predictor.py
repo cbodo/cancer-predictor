@@ -44,7 +44,7 @@ scores = model_selection.cross_val_score(log_model, X, y_array)
 scores_mean = f"Cross Validation Average Score: {scores.mean()}"
 
 # defines function to generate a random number for an attribute in a range from the min value in the dataset to the max value in the dataset for that attribute
-def generate_rand(attribute):
+def generate_attribute_value(attribute):
     min_val = df[str(attribute)].describe()['mean']-2*df[str(attribute)].describe()['std']
     max_val = df[str(attribute)].describe()['mean']+2*df[str(attribute)].describe()['std']
     return random.uniform(min_val, max_val)
