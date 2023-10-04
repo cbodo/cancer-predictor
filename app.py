@@ -1,6 +1,5 @@
 from flask import Flask
 from flask import render_template
-from predictor import textboxes
 from textbox import TextBox
 
 app = Flask(__name__, template_folder='template')
