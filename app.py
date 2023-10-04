@@ -1,7 +1,7 @@
 from flask import Flask
 from flask import render_template
 from textbox import TextBox
-from predictor import generate_attribute_value
+from predictor import accuracy_score, generate_attribute_value, log_model, mse, scores_mean
 
 app = Flask(__name__, template_folder='template')
 
@@ -26,14 +26,51 @@ def index():
 
 @app.route("/background/")
 def background():
-    return render_template('background.html')
+    return render_template('background.html', accuracy_score=accuracy_score, mse=mse, scores_mean=scores_mean)
 
 @app.route("/about/")
 def about():
     return render_template('about.html')
 
 @app.route("/random/")
-def get_values():
+def randomize():
     for textbox in textboxes:
         textbox.value = generate_attribute_value(textbox.name)
     return render_template('index.html', textboxes=textboxes)
+
+@app.route("/predict/")
+def predict():
+    prediction = log_model.predict([[
+        textboxes[0].value,
+        textboxes[1].value,
+        textboxes[2].value,
+        textboxes[3].value,
+        textboxes[4].value,
+        textboxes[5].value,
+        textboxes[6].value,
+        textboxes[7].value,
+        textboxes[8].value,
+        textboxes[9].value,
+        textboxes[0].value,
+        textboxes[1].value,
+        textboxes[2].value,
+        textboxes[3].value,
+        textboxes[4].value,
+        textboxes[5].value,
+        textboxes[6].value,
+        textboxes[7].value,
+        textboxes[8].value,
+        textboxes[9].value,
+        textboxes[0].value,
+        textboxes[1].value,
+        textboxes[2].value,
+        textboxes[3].value,
+        textboxes[4].value,
+        textboxes[5].value,
+        textboxes[6].value,
+        textboxes[7].value,
+        textboxes[8].value,
+        textboxes[9].value
+    ]])
+    result = 'Benign' if prediction[0] == 0 else 'Malignant'
+    return render_template('index.html', textboxes=textboxes, result=result)

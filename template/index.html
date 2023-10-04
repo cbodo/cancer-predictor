@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block content %}
   <h1>{% block title %} Cancer Predictor {% endblock %}</h1>
-  <p class="">
+  <p>
     A prototypical user interface for a machine learning algorithm, used to predict whether a cancer cell is benign or malignant based on user input.
     For simplicity, the data is randomly generated using the 'Randomize' button below, and a diagnosis prediction can be generated using the 'Get Prediction' button.
   </p>
@@ -9,9 +9,10 @@
     <table class="form-table">
       <div class="table-header">
         <div class="buttons">
-            <button type="submit" form="prediction-form" class="button" formaction="{{ url_for('get_values') }}">Randomize</button>
-            
+            <button type="submit" form="prediction-form" class="button" formaction="{{ url_for('randomize') }}">Randomize</button>
+            <button type="submit"  form="prediction-form" class="button" formaction="{{ url_for('predict') }}">Get Prediction</button>
           </div>
+          <div class="prediction">Prediction: <span class="prediction-{{ result | lower }}">{{ result }}</span></div>
       </div>
       {% for textbox in textboxes %}
         <tr class="table-row">
