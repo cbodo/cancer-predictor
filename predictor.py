@@ -16,5 +16,6 @@ textboxes = [
     TextBox('concavity_mean', 0, True),             # concavity_mean 
     TextBox('concave points_mean', 0, True),        # concave points_mean 
     TextBox('symmetry_mean', 0, True),              # symmetry_mean 
-    TextBox('fractal_dimension_mean', 0, True)     # fractal_dimension_mean
+    TextBox('fractal_dimension_mean', 0, True)      # fractal_dimension_mean
 ]
+
