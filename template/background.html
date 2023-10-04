@@ -1,4 +1,398 @@
 {% extends 'base.html' %}
 {% block content %}
-  <h1>{% block title %} Background {% endblock %}</h1>
+
+<div class="background-main">
+    <h1>{% block title %} Background {% endblock %}</h1>
+    <div class="section" id="introduction">
+        <h2>I. Introduction</h2>
+
+        <p>This web app implements a linear regression machine learning model that can used to predict the malignancy of a cancer cell 
+            based on its observed attributes. The data used for training and testing the model was sourced from a publicly available 
+            dataset of cancer cells and their features (<a href="https://www.kaggle.com/datasets/erdemtaha/cancer-data/data">https://www.kaggle.com/datasets/erdemtaha/cancer-data/data</a>).
+        </p>
+        <p>
+            This project was originally developed as a Jupyter Notebook (which can be viewed at <a href="https://github.com/cbodo/ml-malignancy-predictor">https://github.com/cbodo/ml-malignancy-predictor</a>).
+            What follows is a detailed report, based on the Notebook, of the process and Python code used to analyze the data and train and test the model, as well as an added discussion of the results.
+        </p>
+    </div>
+    <div class="section" id="preparation">
+        <h2>II. Preparation</h2>
+        <h3 id="libraries">a. Import Libraries</h3>
+        <p>Import the python libraries needed to train and test the model and analyze the results:</p>
+        <div class="code">
+            import pandas as pd<br>
+            import seaborn as sns<br>
+            import numpy as np<br>
+            import random<br>
+            from matplotlib import pyplot<br>
+            from pandas.plotting import scatter_matrix<br>
+            from sklearn import linear_model, metrics, model_selection, svm<br>
+        </div>
+
+        <h3 id="data">b. Import Data</h3>
+        <p>Import the cancer cell dataset from the Cancer_Data.csv file (download from link above and place in project root directory):</p>
+        <div class="code">
+            <i># import csv file with data from root directory</i><br>
+            url = "./Cancer_Data.csv"<br>
+            data = pd.read_csv(url)<br>
+        </div>
+        <p>
+            Create an array to store all columns from the CSV file that will be used in the dataframe. Next, create the dataframe from the dataset. 
+            Finally, convert the categorical diagnosis column to numerical
+        </p>
+        <div class="code">
+            <i># create column array</i><br>
+            column_names = [<br>
+            &nbsp;&nbsp;'diagnosis',<br>
+            &nbsp;&nbsp;'radius_mean',<br>
+            &nbsp;&nbsp;'texture_mean',<br>
+            &nbsp;&nbsp;'perimeter_mean',<br>
+            &nbsp;&nbsp;'area_mean',<br>
+            &nbsp;&nbsp;'smoothness_mean',<br>
+            &nbsp;&nbsp;'compactness_mean',<br>
+            &nbsp;&nbsp;'concavity_mean',<br>
+            &nbsp;&nbsp;'concave points_mean',<br>
+            &nbsp;&nbsp;'symmetry_mean',<br>
+            &nbsp;&nbsp;'fractal_dimension_mean',<br>
+            &nbsp;&nbsp;'radius_se',<br>
+            &nbsp;&nbsp;'texture_se',<br>
+            &nbsp;&nbsp;'perimeter_se',<br>
+            &nbsp;&nbsp;'area_se',<br>
+            &nbsp;&nbsp;'smoothness_se',<br>
+            &nbsp;&nbsp;'compactness_se',<br>
+            &nbsp;&nbsp;'concavity_se',<br>
+            &nbsp;&nbsp;'concave points_se',<br>
+            &nbsp;&nbsp;'symmetry_se',<br>
+            &nbsp;&nbsp;'fractal_dimension_se',<br>
+            &nbsp;&nbsp;'radius_worst',<br>
+            &nbsp;&nbsp;'texture_worst',<br>
+            &nbsp;&nbsp;'perimeter_worst',<br>
+            &nbsp;&nbsp;'area_worst',<br>
+            &nbsp;&nbsp;'smoothness_worst',<br>
+            &nbsp;&nbsp;'compactness_worst',<br>
+            &nbsp;&nbsp;'concavity_worst',<br>
+            &nbsp;&nbsp;'concave points_worst',<br>
+            &nbsp;&nbsp;'symmetry_worst',<br>
+            &nbsp;&nbsp;'fractal_dimension_worst'<br>
+            ]<br>
+            <br>
+            <i># create dataframe</i><br>
+            df = pd.DataFrame(data,columns=column_names)<br>
+            <br>
+            <i># convert target column from categorical to numerical</i><br>
+            df['diagnosis'].replace(['B', 'M'], [0, 1], inplace=True)
+        </div>
+    </div>
+    <div class="section" id="data-visualization">
+        <h2>III. Data Visualization</h2>
+        <h3 id="heatmap">a. Heat Map</h3>
+        <p>The heat map below helps visualize correlations between the attributes of cancer cells in the dataset.</p>
+        <div class="code">
+            <i># create and display heat map of data</i><br>
+            pyplot.figure(figsize=(20,20))<br>
+            sns.heatmap(df.corr(),cbar=True,annot=True)<br>
+            pyplot.show()
+        </div>
+
+        <h3>Images:</h3>
+        <div class="images">
+            <div class="responsive">
+                <div class="gallery">
+                    <img id="heatmap" src="{{ url_for('static', filename='images/heatmap.svg') }}" onclick=get_modal(this) alt="Attribute Heat Map">
+                    <div class="desc">Attribute Heat Map</div>
+                </div>
+            </div>
+        </div>
+
+        <h3 id="histograms">b. Histograms</h3>
+        <p>
+            The following histograms help illustrate how cancer diagnoses are impacted by the various features of a cancer cell.
+            The data is first divided into two sets: one for benign cells, and one for malignant cells.
+        </p>
+        <div class="code">
+            <i># group data by diagnosis type</i><br>
+            diagnosis_B = df[df['diagnosis'] == 0]<br>
+            diagnosis_M = df[df['diagnosis'] == 1]
+        </div>
+        <p>The following code defines a general-use function to generate a histogram for a specified attribute in the dataset.</p>
+        <div class="code">
+            def generate_histplot(attribute):<br>
+            &nbsp;&nbsp;sns.histplot(diagnosis_B[attribute], color='orange', kde=True, bins = 10)<br>
+            &nbsp;&nbsp;sns.histplot(diagnosis_M[attribute], color='blue', kde=True, bins = 10)<br>
+            &nbsp;&nbsp;sns.set_theme(style="whitegrid", palette=None)<br>
+            &nbsp;&nbsp;pyplot.show();
+        </div>
+        <p>Now you can call the function for each attribute. Here we only get histograms for each attribute's 'mean' columns</p>
+        <div class="code">
+            <i># generate histograms for mean columns</i><br>
+            generate_histplot('radius_mean');<br>
+            generate_histplot('texture_mean');<br>
+            generate_histplot('perimeter_mean');<br>
+            generate_histplot('area_mean');<br>
+            generate_histplot('smoothness_mean');<br>
+            generate_histplot('compactness_mean');<br>
+            generate_histplot('concavity_mean');<br>
+            generate_histplot('concave points_mean');<br>
+            generate_histplot('symmetry_mean');<br>
+            generate_histplot('fractal_dimension_mean');<br>
+        </div>
+        <h3>Images:</h3>
+        <div class="images">
+            <div class="responsive">
+                <div class="gallery">
+                    <img src="{{ url_for('static', filename='images/histplot_radius.svg') }}" onclick=get_modal(this) alt="Radius Histogram">
+                    <div class="desc">Radius Histogram</div>
+                </div>
+            </div>
+            
+            <div class="responsive">
+                <div class="gallery">
+                    <img src="{{ url_for('static', filename='images/histplot_texture.svg') }}" onclick=get_modal(this) alt="Texture Histogram">
+                    <div class="desc">Texture Histogram</div>
+                </div>
+            </div>
+            
+            <div class="responsive">
+                <div class="gallery">
+                    <img src="{{ url_for('static', filename='images/histplot_perimeter.svg') }}" onclick=get_modal(this) alt="Perimeter Histogram">
+                    <div class="desc">Perimeter Histogram</div>
+                </div>
+            </div>
+            
+            <div class="responsive">
+                <div class="gallery">
+                    <img src="{{ url_for('static', filename='images/histplot_area.svg') }}" onclick=get_modal(this) alt="Area Histogram">
+                    <div class="desc">Area Histogram</div>
+                </div>
+            </div>
+            
+            <div class="responsive">
+                <div class="gallery">
+                    <img src="{{ url_for('static', filename='images/histplot_smoothness.svg') }}" onclick=get_modal(this) alt="Smoothness Histogram">
+                    <div class="desc">Smoothness Histogram</div>
+                </div>
+            </div>
+            
+            <div class="responsive">
+                <div class="gallery">
+                    <img src="{{ url_for('static', filename='images/histplot_compactness.svg') }}" onclick=get_modal(this) alt="Compactness Histogram">
+                    <div class="desc">Compactness Histogram</div>
+                </div>
+            </div>
+            
+            <div class="responsive">
+                <div class="gallery">
+                    <img src="{{ url_for('static', filename='images/histplot_concavity.svg') }}" onclick=get_modal(this) alt="Concavity Histogram">
+                    <div class="desc">Concavity Histogram</div>
+                </div>
+            </div>
+            
+            <div class="responsive">
+                <div class="gallery">
+                    <img src="{{ url_for('static', filename='images/histplot_concave_points.svg') }}" onclick=get_modal(this) alt="Concave Points Histogram">
+                    <div class="desc">Concave Points Histogram</div>
+                </div>
+            </div>
+            
+            <div class="responsive">
+                <div class="gallery">
+                    <img src="{{ url_for('static', filename='images/histplot_symmetry.svg') }}" onclick=get_modal(this) alt="Symmetry Histogram">
+                    <div class="desc">Symmetry Histogram</div>
+                </div>
+            </div>
+            
+            <div class="responsive">
+                <div class="gallery">
+                    <img src="{{ url_for('static', filename='images/histplot_fractal_dim.svg') }}" onclick=get_modal(this) alt="Fractal Dimension Histogram">
+                    <div class="desc">Fractal Dimension Histogram</div>
+                </div>
+            </div>
+            <!-- <div class="clearfix"></div> -->
+        </div>
+        <h3 id="scatterplots">b. Scatterplots</h3>
+        <p>
+            The scatterplots below visualize how two selected attributes affect the resultant diagnosis.
+        </p>
+        <div class="code">
+            <i># generate and display lmplots for various attributes</i><br>
+            <br>
+            <i># compare cell radius and perimeter</i><br>
+            sns.lmplot(data=df, x='radius_mean', y='perimeter_mean', hue='diagnosis')<br>
+            pyplot.show();<br>
+            <br>
+            <i># compare cell concavity and concave points</i><br>
+            sns.lmplot(data=df, x='concavity_mean', y='concave points_mean', hue='diagnosis')<br>
+            pyplot.show();<br>
+            <br>
+            <i># compare cell area and compactness</i><br>
+            sns.lmplot(data=df, x='area_mean', y='compactness_mean', hue='diagnosis')<br>
+            pyplot.show();
+        </div>
+        <h3>Images:</h3>
+        <div class="images">
+            <div class="responsive">
+                <div class="gallery">
+                    <img src="{{ url_for('static', filename='images/scatterplot_perimeter_radius.svg') }}" onclick=get_modal(this) alt="Perimeter v. Radius">
+                    <div class="desc">Perimeter v. Radius</div>
+                </div>
+            </div>
+            
+            <div class="responsive">
+                <div class="gallery">
+                    <img src="{{ url_for('static', filename='images/scatterplot_concave_points_concavity.svg') }}" alt="Concave Points v. Concavity">
+                    <div class="desc">Concave Points v. Concavity</div>
+                </div>
+            </div>
+            
+            <div class="responsive">
+                <div class="gallery">
+                    <img src="{{ url_for('static', filename='images/scatterplot_compactness_area.svg') }}" onclick=get_modal(this) alt="Compactness v. Area">
+                    <div class="desc">Compactness v. Area</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="section" id="model">
+        <h2>IV. Create and Train Model</h2>
+        <p>Create a <code>LogisticRegression</code> model object.</p>
+        <div class="code">
+            <i># create logistic regression model with max iterations set to 10000</i><br>
+            log_model = linear_model.LogisticRegression(max_iter=10000)
+        </div>
+
+        <p>Split the data into two sets: independent (<code>X</code>) and dependent (<code>y</code>).</p>
+        <div class="code">
+            <i># define the independent (X) and dependent (y) sets</i><br>
+            X = df.drop(columns=['diagnosis'])<br>
+            y = df[['diagnosis']].copy()
+        </div>
+
+        <p>Use the <code>train_test_split</code> function to create the training and testing sets.</p>
+        <div class="code">
+            <i># create the training and testing sets</i><br>
+            X_train, X_test, y_train, y_test = model_selection.train_test_split(X, y, test_size=0.333, random_state=41)
+        </div>
+
+        <p>Use the <code>fit</code> function to train the model using the training sets.</p>
+        <div class="code">
+            log_model.fit(X_train.values,np.ravel(y_train))
+        </div>
+    </div>
+    <div class="section" id="analysis">
+        <h2>V. Predictions and Analysis</h2>
+        <p>Use the <code>predict</code> function to generate a set of predictions with the <code>X</code> test set.</p>
+        <div class="code">
+            <i># generate predictions set</i><br>
+            y_pred_log = log_model.predict(X_test.values)
+        </div>
+
+        <p>Calculate and display the accuracy score and mean squared error for the predictions. Generate and display a confusion matrix to visualize the results.</p>
+
+        <div class="code">
+            <i># accuracy analysis</i><br>
+            <br>
+            <i># calculate accuracy (where accuracy = correct predictions / total predictions)</i><br>
+            print("Accuracy Score", metrics.accuracy_score(y_test, y_pred_log))<br>
+            <br>
+            <i># calculate mean squared error (the difference between predicted and actual values)</i><br>
+            print("Mean Squared Error: ", metrics.mean_squared_error(y_test, y_pred_log))<br>
+            <br>
+            <i># generate confusion matrix</i><br>
+            cm_log = metrics.confusion_matrix(y_test, y_pred_log, labels=log_model.classes_)<br>
+            disp_log = metrics.ConfusionMatrixDisplay(confusion_matrix=cm_log, display_labels=log_model.classes_)<br>
+            disp_log.plot()<br>
+        </div>
+
+        <p>Result:</p>
+        <div class="code">
+            {{accuracy_score}}<br>
+            {{mse}}
+        </div>
+        <h3>Images:</h3>
+        <div class="images">
+            <div class="responsive">
+                <div class="gallery">
+                    <img src="{{ url_for('static', filename='images/confusion_matrix.svg') }}" onclick=get_modal(this) alt="Confusion Matrix">
+                    <div class="desc">Confusion Matrix</div>
+                </div>
+            </div>
+        </div>
+
+        <p>Finally, as an additional layer of validation, we can use cross-validation to resample the data and calculate the cross validation average score.</p>
+        <div class="code">
+            <i># cross-validation</i><br>
+            y_array = np.ravel(y.values)<br>
+            k_folds = model_selection.KFold(n_splits = 5, shuffle=True)<br>
+            scores = model_selection.cross_val_score(log_model, X, y_array)<br>
+            <br>
+            print("Cross Validation Average Score: ", scores.mean())<br>
+        </div>
+        <p>Result:</p>
+        <div class="code">
+            {{scores_mean}}
+        </div>
+    </div>
+    <div class="section" id="results">
+        <h2>VI. Discussion</h2>
+        <p>
+            The data used in this project was already complete and cleaned upon receipt, therefore minimal work was needed to prepare the data for use. 
+        </p>
+        <p>
+            Before developing the model, our team created visualizations to analyze the dataset. 
+            First, we generated a heat map, which showed positive correlation between attributes in the dataset. 
+            Next, we created histograms to visualize the impact of each attribute on a benign or malignant diagnosis. In most cases, a higher 
+            value strongly correlated to a malignant diagnosis. In some cases (smoothness, symmetry, and fractal dimension), that correlation still exists, 
+            but is less pronounced. Finally, we used scatter plots to compare the impact of attribute pairs on diagnosis. This led to the conclusion 
+            that as attribute values increase, the likeliness of a malignant diagnosis increases.
+        </p>
+        <p>
+            Our model was built using a Linear Regression machine learning algorithm, which was able to analyze the data and create predictions based on input data. 
+            Due to the linear correlation between the attributes, a linear algorithm was most suitable for the model. We used scikit-learn’s 
+            <code>linear_model</code> library to create a LogisticRegression model, then used <code>train_test_split()</code> to create the training and testing sets. 
+            We used the diagnosis column as the independent (X) set and the remaining columns for the dependent (y) set. We trained the model using the 
+            <code>linear_regression</code> <code>fit()</code> function, and generated predictions with the <code>predict()</code> function.
+        </p>
+        <p>
+            Once the model was trained, we were able to analyze the accuracy of the model’s diagnosis predictions. We used the scikit-learn <code>metrics</code> 
+            to calculate the accuracy score for the predictions. Our model was able to achieve an <b>accuracy score</b> of <b>97%</b> with a <b>mean squared 
+            error</b> of <b>2.6%</b>. We generated a confusion matrix to visualize the accuracy of our model. Our predictions resulted in <b>118 true 
+            positives</b>, <b>1 false positive</b>, <b>4 false negatives</b>, and <b>67 true negatives</b>. Finally, we implemented cross-validation to resample the data for further 
+            refinement, and achieved a <b>cross validation average score</b> of <b>95%</b>.
+        </p>
+
+    </div>
+</div>
+
+<div id="modal" class="modal">
+    <span class="close">&times;</span>
+    <img class="modal-content" id="modal-img">
+    <div id="caption"></div>
+</div>
+
+<script>
+    function get_modal(img) {
+        var modal = document.getElementById("modal");
+        var imgUrl = document.getElementById(img.src);
+        var modalImg = document.getElementById('modal-img');
+        var captionText = document.getElementById("caption");
+
+        modal.style.display = "block";
+        var url = img.src.split("/")
+        modalImg.src = '../static/images/' + url[url.length - 1];
+        captionText.innerHTML = img.alt;
+
+        // Closes modal via 'X' button
+        var span = document.getElementsByClassName("close")[0];
+        span.onclick = function() {
+            modal.style.display = "none";
+        }
+
+        window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+        }
+    }
+</script>
+
 {% endblock %}
