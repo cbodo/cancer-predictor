@@ -1,9 +1,8 @@
-from flask import Flask
-from flask import render_template
+from flask import Flask, render_template
 from textbox import TextBox
 from predictor import accuracy_score, generate_attribute_value, log_model, mse, scores_mean
 
-app = Flask(__name__, template_folder='template', static_folder='static')
+app = Flask(__name__)
 
 textboxes = [
     TextBox('radius_mean', 0, True),                # radius_mean
