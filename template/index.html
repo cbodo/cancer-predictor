@@ -7,19 +7,7 @@
   </p>
   <form id="prediction-form" class="form-style">
     <table class="form-table">
-      <div class="table-header">
-        <div class="buttons">
-            <button type="submit" form="prediction-form" class="button" formaction="{{ url_for('randomize') }}">Randomize</button>
-            <button type="submit"  form="prediction-form" class="button" formaction="{{ url_for('predict') }}">Get Prediction</button>
-          </div>
-          <div class="prediction">Prediction: <span class="prediction-{{ result | lower }}">{{ result }}</span></div>
-      </div>
-      {% for textbox in textboxes %}
-        <tr class="table-row">
-          <td class="table-row-label"><label for="{{ textbox.name }}">{{ textbox.display_name() }}:</label></td>
-          <td class="table-text-box"><input type="text" id="{{ textbox.name }}" value="{{ textbox.value }}" disabled="true"></td>
-        </tr>
-      {% endfor %}
+
     </table>
   </form>
 {% endblock %}

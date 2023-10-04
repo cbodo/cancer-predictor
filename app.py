@@ -20,60 +20,12 @@ textboxes = [
 
 @app.route('/')
 def index():
-    for textbox in textboxes:
-        textbox.value = 0
-    return render_template('index.html', textboxes=textboxes)
+    return render_template('index.html')
 
 @app.route("/background/")
 def background():
-    return render_template('background.html', accuracy_score=accuracy_score, mse=mse, scores_mean=scores_mean)
+    return render_template('background.html')
 
 @app.route("/about/")
 def about():
     return render_template('about.html')
-
-@app.route("/random/")
-def randomize():
-    for textbox in textboxes:
-        textbox.value = generate_attribute_value(textbox.name)
-    return render_template('index.html', textboxes=textboxes)
-
-@app.route("/predict/")
-def predict():
-    prediction = log_model.predict([[
-        textboxes[0].value,
-        textboxes[1].value,
-        textboxes[2].value,
-        textboxes[3].value,
-        textboxes[4].value,
-        textboxes[5].value,
-        textboxes[6].value,
-        textboxes[7].value,
-        textboxes[8].value,
-        textboxes[9].value,
-        textboxes[0].value,
-        textboxes[1].value,
-        textboxes[2].value,
-        textboxes[3].value,
-        textboxes[4].value,
-        textboxes[5].value,
-        textboxes[6].value,
-        textboxes[7].value,
-        textboxes[8].value,
-        textboxes[9].value,
-        textboxes[0].value,
-        textboxes[1].value,
-        textboxes[2].value,
-        textboxes[3].value,
-        textboxes[4].value,
-        textboxes[5].value,
-        textboxes[6].value,
-        textboxes[7].value,
-        textboxes[8].value,
-        textboxes[9].value
-    ]])
-    result = 'Benign' if prediction[0] == 0 else 'Malignant'
-    return render_template('index.html', textboxes=textboxes, result=result)
-
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=10000)
