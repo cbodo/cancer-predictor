@@ -6,7 +6,15 @@
   </p>
   <form id="prediction-form" class="form-style">
     <table class="form-table">
+      <div class="table-header">
 
+      </div>
+      {% for text_box in text_boxes %}
+        <tr class="table-row">
+          <td class="table-row-label"><label for="{{ text_box.name }}">{{ text_box.display_name() }}:</label></td>
+          <td class="table-text-box"><input type="text" id="{{ text_box.name }}" value="{{ text_box.value }}" disabled="true"></td>
+        </tr>
+      {% endfor %}
     </table>
   </form>
 {% endblock %}
