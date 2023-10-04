@@ -2,7 +2,3 @@
 .DS_Store
 /static/.DS_Store
 /__pycache__/
-# Elastic Beanstalk Files
-.elasticbeanstalk/*
-!.elasticbeanstalk/*.cfg.yml
-!.elasticbeanstalk/*.global.yml
