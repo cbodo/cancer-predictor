@@ -6,21 +6,43 @@
     For simplicity, the data is randomly generated using the 'Randomize' button below, and a diagnosis prediction can be generated using the 'Get Prediction' button.
     You can read more about the process behind developing the model in the 'Background' section.
   </p>
-  <form id="prediction-form" class="form-style">
-    <table class="form-table">
-      <div class="table-header">
-        <div class="buttons">
-            <button type="submit" form="prediction-form" class="button" formaction="{{ url_for('randomize') }}">Randomize</button>
-            <button type="submit"  form="prediction-form" class="button" formaction="{{ url_for('predict') }}">Get Prediction</button>
-          </div>
-          <div class="prediction">Prediction: <span class="prediction-{{ result | lower }}">{{ result }}</span></div>
+  <div>
+    <div class="d-flex justify-content-center gap-2">
+      <button type="submit" form="prediction-form" class="btn btn-outline-secondary btn-lg w-50" formaction="{{ url_for('randomize') }}">Randomize</button>
+      <button type="submit" form="prediction-form" class="btn btn-outline-secondary btn-lg w-50" formaction="{{ url_for('predict') }}">Get Prediction</button>
+    </div>
+    <div class="d-flex justify-content-center mt-2 mb-2">
+      <div class="card w-100">
+        <div class="card-header">Prediction Result</div>
+        <div class="card-body">
+          {% if result %}
+            {% if result == 'Malignant' %}
+              <span class="text-danger">{{ result }}</span>
+            {% else %}
+              <span class="text-success">{{ result }}</span>
+            {% endif %}
+          {% else %}
+            <span class="text-black-50">Result</span>
+          {% endif %}
+        </div>
       </div>
+  </div>
+  <form id="prediction-form">
       {% for textbox in textboxes %}
-        <tr class="table-row">
-          <td class="table-row-label"><label for="{{ textbox.name }}">{{ textbox.display_name() }}:</label></td>
-          <td class="table-text-box"><input type="text" id="{{ textbox.name }}" value="{{ textbox.value }}" disabled="true"></td>
-        </tr>
+        <div class="row mb-3">
+          <label class="col-sm-2 col-form-label col-form-label-lg"for="{{ textbox.name }}">{{ textbox.display_name() }}:</label></td>
+          <div class="col-sm">
+            <input type="text" 
+                    class="form-control form-control-lg"
+                    id="{{ textbox.name }}" 
+                    value="{{ '%0.8f' % textbox.value|float }}" 
+                    min="{{ textbox.min_value }}"
+                    max="{{ textbox.max_value }}"
+                    disabled>
+          </div>
+          <div class="text-end fs-6 text-secondary">A number between {{ '%0.8f' % textbox.min|float }} and {{ '%0.8f' % textbox.max|float }}.</div>
+        </div>
       {% endfor %}
-    </table>
   </form>
+
 {% endblock %}

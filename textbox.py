@@ -1,12 +1,14 @@
 class TextBox:
     name: str
     value: str
-    disabled: bool
+    min: float
+    max: float
 
-    def __init__(self, name, value, disabled):
+    def __init__(self, name, value, min, max):
         self.name = name
         self.value = value
-        self.disabled = disabled
+        self.min = min
+        self.max = max
 
     def display_name(self):
         return self.name.replace("_", " ").title()
