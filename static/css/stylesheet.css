@@ -1,70 +1,251 @@
-body {
-    background: white;
-    margin: 0;
-    padding: 0px;
+a {
+	text-decoration: none;
+	color: inherit;
 }
 
-.header {
-    display: flex;
-    flex-direction: row;
+ul, li {
+	list-style: none;
+}
+
+/* Typography */
+body {
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+	background-color: #eee;
+	margin-top: 60px; /* height of nav-bar */
+}
+
+.site-logo {
+	font-size: 2rem;
+	font-weight: bolder;
+	margin: 0 1rem;
+    padding-left: 2rem;;
+}
+
+/* Navigation */
+
+.container {
+	max-width: 1200px; /* max 'width' of contents of site */
+	margin: 0 auto; /* centered horizontally  */
+}
+
+.nav-bar {
+	position: fixed; /* lock to top */
+	top: 0;
+	width: 100%; /* full width */
+	background-color: white;
+	height: 60px;
+}
+
+.nav-bar .container {
+	display: flex;
+	align-items: center; /* vertically center */
+	height: 100%;
     justify-content: space-between;
 }
 
-nav {
-    position: fixed;
-    top: 0;
-    width: 100%;
-    background-color: white;
-    z-index: 1;
-    box-shadow: 0px 0px 4px lightgray;
-    padding: 1vw;
+/* Hide checkbox that controls Mobile Nav Button*/
+#drop-down-cbox {
+	display: none;
 }
 
-nav a {
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 1.2vw;
-    font-weight: bold;
-    text-decoration: none;
-    color: black;
-    padding: 1vw;
+/* Mobile Nav Button */
+#drop-down-cbox + label {
+	position: relative;
+	display: none;
+	width: 60px;
+	height: 60px;
+	overflow: hidden;
+	background-color: transparent;
+	transition: all 10ms ease-in-out;
 }
+
+/* Mobile Nav Button Bars */
+#drop-down-cbox + label span {
+	position: absolute;
+	display: block;
+	background-color: black;
+	width: 34px;
+	height: 4px;
+	border-radius: 2px;
+	left: 50%;
+	transform: translate(-50%, -50%); /* centering trick */
+	transition: all 300ms ease-in-out;
+}
+
+/* Mobile Nav Button Bars Invididually */
+#drop-down-cbox + label span:nth-child(1) {
+	top: 35%; /* evenly spaced */
+}
+#drop-down-cbox + label span:nth-child(2) {
+	top: 50%; /* evenly spaced */
+}
+#drop-down-cbox + label span:nth-child(3) {
+	top: 65%; /* evenly spaced */
+}
+
+#drop-down-cbox:checked + label span {
+	background-color: black;
+}
+
+/* Transform the bars into an 'X' */
+#drop-down-cbox:checked + label span:nth-child(1) {
+	top: 50%;
+	transform: translate(-50%, -50%) rotate(45deg); /* center, then rotate */
+}
+#drop-down-cbox:checked + label span:nth-child(2) {
+	left: -150%; /* move center bar out of the picture */
+}
+#drop-down-cbox:checked + label span:nth-child(3) {
+	top: 50%;
+	transform: translate(-50%, -50%) rotate(-45deg); /* center, then rotate */
+}
+
+/* Main Nav Desktop */
+.main-nav {
+	display: flex;
+	align-items: center; /* center vertically */
+}
+
+.main-nav li {
+	display: block;
+	width: 100%;
+	height: 60px;
+	line-height: 60px; /* vertically center text, matches height */
+	text-align: center;
+    padding: 0 2rem 0;
+}
+
+.main-nav li a,
+.main-nav li span {
+	display: block;
+	width: 100%;
+	height: 100%;
+}
+
+.main-nav li > ul {
+	max-height: 0px; /* max-height instead of height, height can't transition to auto */
+	transition: all 500ms ease-in-out;
+	overflow: hidden; /* make it so nav doesn't show beyond the 0px max-height */
+}
+
+.main-nav li:hover > ul {
+	max-height: 180px; /* height x how many links */
+	height: auto;
+}
+
+.main-nav li > ul li a,
+.main-nav li > ul li span {
+	background-color: white;
+}
+
+.main-nav li > ul li a:hover,
+.main-nav li > ul li span:hover {
+	border-bottom: none;
+}
+
+/* Tablet and Mobile View */
+@media (max-width: 768px) {
+	.site-logo {
+		font-size: 2rem;
+		flex-grow: 1;
+		text-align: center;
+        padding-left: 0;
+	}
+	
+	#drop-down-cbox + label {
+		display: block; /* unhide the mobile nav button */
+	}
+	
+	.main-nav {
+		max-height: 0px; /* same vertical grow transition trick as above */
+		height: calc(100vh - 60px); /* take full vertical viewport height, -60px for nav-bar */
+		overflow: hidden;
+		position: absolute;
+		top: 60px;
+		line-height: auto;
+		left: 0;
+		width: 100%;
+		flex-direction: column;
+		background-color: white;
+		transition: all 500ms ease-in-out;
+	}
+	
+	#drop-down-cbox:checked ~ .main-nav {
+		max-height: calc(100vh - 60px);
+		transition: all 500ms ease-in-out;
+	}
+
+    .main-nav li {
+        padding: 0;
+    }
+
+	.main-nav li span {
+		position: relative;
+	}
+	
+	/* design and position downward arrow */
+	.main-nav li span:after {
+		content: "";
+		width: 6px;
+		height: 6px;
+		position: absolute;
+		top: 50%;
+		margin-top: -2px;
+		margin-left: 8px;
+		transform: translateY(-50%) rotate(-45deg);
+		border-left: 2px solid black;
+		border-bottom: 2px solid black;
+	}
+	
+	.main-nav li > ul li {
+		position: relative;
+	}
+	
+	.main-nav li > ul li a,
+	.main-nav li > ul li span {
+		background-color: #eee;
+	}
+}
+
+
+/* Main Content */
 
 .content {
-    margin-top: 2vw;
-    padding: 5vw;
+    padding: 2rem;
 }
 
 h1 {
     font-family: Arial, Helvetica, sans-serif;
-    font-size: 2vw;
+    font-size: 2.5rem;
     text-align: center;
 }
 
 h2 {
     font-family: Arial, Helvetica, sans-serif;
-    font-size: 1.5vw;
+    font-size: 2rem;
 }
 
 h3 {
     font-family: Arial, Helvetica, sans-serif;
-    font-size: 1.5vw;
+    font-size: 1.5rem;
     text-align: justify;
 }
 
 p {
     font-family: Arial, Helvetica, sans-serif;
-    font-size: 1vw;
-    color: DarkSlateGray;
+    font-size: 1rem;
+    color: black;
 }
 
 .code {
     width: 100%;
-    padding: 2vw;
+    padding: 2rem;
     background-color: rgb(229, 229, 229);
-    border-radius: 0.25vw;
+    border-radius: 0.25rem;
     overflow-x: scroll;
-    font-size: 1vw;
+    font-size: 1rem;
     font-family: monospace;
+    color: rgba(0, 0, 0, 0.8);
 }
 
 .code i {
@@ -73,20 +254,23 @@ p {
 
 .about-table {
     font-family: Arial, Helvetica, sans-serif;
-    font-size: 1vw;
-    color: DarkSlateGray;
+    font-size: 1rem;
+}
+
+.about-table td {
+    padding: 1rem;
 }
 
 a {
     text-decoration: none;
-    color: #2C3E50;
+    color: black;
     font-weight: bold;
 }
 
 a:hover {
     text-decoration-color: FireBrick;
     text-decoration:underline;
-    text-decoration-thickness: 2px;
+    text-decoration-thickness: 0.25rem;
 }
 
 .form-style {
@@ -98,33 +282,33 @@ a:hover {
 }
 
 .form-table {
-    width: 60%;
+    width: 80%;
 }
 
 .table-row-label {
     text-align: left;
-    font-size: 1vw;
+    font-size: 1rem;
 }
 
 .table-text-box input {
-    padding: 1vw;
+    padding: 1rem;
     border: 1px solid #ccc;
-    border-radius: 0.25vw;
-    margin-bottom: 1vw;
+    border-radius: 0.25rem;
+    margin-bottom: 1rem;
     width: 100%;
     box-sizing: border-box;
     color: #2C3E50;
-    font-size: 1vw;
+    font-size: 1rem;
     text-align: right;
 }
 
 .prediction {
     display: flex;
     justify-content: space-between;
-    font-size: 1vw;
+    font-size: 1rem;
     font-weight: bold;
     width: 40%;
-    padding: 2w;
+    padding: 1rem;
 }
 
 .prediction-malignant {
@@ -146,12 +330,13 @@ a:hover {
     background: rgba(0, 0, 0, 0.1);
     font-weight: bold;
     border: 0 none;
-    border-radius: 0.25vw;
+    border-radius: 0.25rem;
     cursor: pointer;
-    padding: 2vw;
-    margin: 2vw 2vw;
+    padding: 1rem;
+    margin: 1rem 1rem;
     text-decoration: none;
-    font-size: 1vw;
+    font-size: 1rem;
+    color: black;
 }
 
 .button:hover, .button:focus {
@@ -162,8 +347,8 @@ a:hover {
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 70%;
-    padding: 2vw;
+    width: 80%;
+    padding: 1rem;
 }
 
 .background {
@@ -185,11 +370,11 @@ div.gallery img {
 }
 
 div.desc {
-    padding: 1vw;
+    padding: 1rem;
     color: darkslategray;
     text-align: center;
     font-family: Arial, Helvetica, sans-serif;
-    font-size: 0.7vw;
+    font-size: 0.7rem;
 }
 
 * {
@@ -203,15 +388,9 @@ div.desc {
 }
 
 .responsive {
-    padding: 0.5vw;
-    width: 20vw;
+    padding: 0.5rem;
+    width: 10rem;
 }
-
-.clearfix:after {
-    content: "";
-    display: table;
-    clear: both;
-  }
 
 .modal {
     display: none;
@@ -275,25 +454,31 @@ div.desc {
   
   @media only screen and (max-width: 700px) {
     .responsive {
-    width: 25%;
+    width: 30%;
     margin: 6px 0;
     }
 }
 
 @media only screen and (max-width: 500px) {
     .responsive {
-    width: 100%;
+    width: 15%;
     }
-    nav {
-        padding: 1vw;
+    .form-table {
+        width: 100%;
     }
-    nav a {
-        padding: 1vw;
+    
+    .prediction {
+        width: 100%;
     }
+    
+    .table-header {
+        width: 100%;
+    }
+
 }
 
   @media only screen and (max-width: 700px){
     .modal-content {
-      width: 100%;
+      width: 90%;
     }
   }
