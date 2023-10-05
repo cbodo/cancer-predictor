@@ -3,8 +3,9 @@
 
 <div class="background-main">
 <h1>{% block title %} Background {% endblock %}</h1>
-
-<button class="btn btn-outline-secondary mt-2 mb-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">Contents</button>
+<div style="position:fixed;top:5rem;right:1rem;background-color:white;">
+    <button style="" class="btn btn-outline-secondary mt-2 mb-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">Contents</button>
+</div>
 <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
     <div class="offcanvas-header">
       <h5 class="offcanvas-title" id="offcanvasRightLabel">Contents</h5>
@@ -12,17 +13,17 @@
     </div>
     <div class="offcanvas-body">
         <ul class="text-end">
-            <li><a class="p-2 text-black fs-4 fw-bold" href="#introduction">I. Introduction</a></li>
-            <li><a class="p-2 text-black fs-4 fw-bold" href="#preparation">II. Preparation</a></li>
-            <li><a class="p-2 text-black fs-5" href="#libraries">a. Import Libraries</a></li>
-            <li><a class="p-2 text-black fs-5" href="#data">b. Import Data</a></li>
-            <li><a class="p-2 text-black fs-4 fw-bold" href="#data-visualization">III. Data Visualization</a></li>
-            <li><a class="p-2 text-black fs-5" href="#heatmap">a. Heat Map</a></li>
-            <li><a class="p-2 text-black fs-5" href="#histograms">b. Histograms</a></li>
-            <li><a class="p-2 text-black fs-5" href="#scatterplots">c. Scatterplots</a></li>
-            <li><a class="p-2 text-black fs-4 fw-bold" href="#model">IV. Create and Train Model</a></li>
-            <li><a class="p-2 text-black fs-4 fw-bold" href="#analysis">V. Predictions and Analysis</a></li>
-            <li><a class="p-2 text-black fs-4 fw-bold" href="#discussion">VI. Discussion</a></li>
+            <li><a class="p-2 text-black fs-4 fw-bold" href="#introduction" onclick=closeContents()>I. Introduction</a></li>
+            <li><a class="p-2 text-black fs-4 fw-bold" href="#preparation" onclick=closeContents()>II. Preparation</a></li>
+            <li><a class="p-2 text-black fs-5" href="#libraries" onclick=closeContents()>a. Import Libraries</a></li>
+            <li><a class="p-2 text-black fs-5" href="#data" onclick=closeContents()>b. Import Data</a></li>
+            <li><a class="p-2 text-black fs-4 fw-bold" href="#data-visualization" onclick=closeContents()>III. Data Visualization</a></li>
+            <li><a class="p-2 text-black fs-5" href="#heatmap" onclick=closeContents()>a. Heat Map</a></li>
+            <li><a class="p-2 text-black fs-5" href="#histograms" onclick=closeContents()>b. Histograms</a></li>
+            <li><a class="p-2 text-black fs-5" href="#scatterplots" onclick=closeContents()>c. Scatterplots</a></li>
+            <li><a class="p-2 text-black fs-4 fw-bold" href="#model" onclick=closeContents()>IV. Create and Train Model</a></li>
+            <li><a class="p-2 text-black fs-4 fw-bold" href="#analysis" onclick=closeContents()>V. Predictions and Analysis</a></li>
+            <li><a class="p-2 text-black fs-4 fw-bold" href="#discussion" onclick=closeContents()>VI. Discussion</a></li>
         </ul>
     </div>
   </div>
@@ -123,7 +124,7 @@ pyplot.show()
 <div class="images">
     <div class="responsive">
         <div class="gallery">
-            <img id="heatmap" src="{{ url_for('static', filename='images/heatmap.svg') }}" class="img-thumbnail" onclick=get_modal(this) alt="Attribute Heat Map">
+            <img id="heatmap" src="{{ url_for('static', filename='images/heatmap.svg') }}" class="img-thumbnail" onclick=getModal(this) alt="Attribute Heat Map">
             <div class="desc">Attribute Heat Map</div>
         </div>
     </div>
@@ -165,70 +166,70 @@ generate_histplot('fractal_dimension_mean');
 <div class="images">
     <div class="responsive">
         <div class="gallery">
-            <img src="{{ url_for('static', filename='images/histplot_radius.svg') }}" class="img-thumbnail" onclick=get_modal(this) alt="Radius Histogram">
+            <img src="{{ url_for('static', filename='images/histplot_radius.svg') }}" class="img-thumbnail" onclick=getModal(this) alt="Radius Histogram">
             <div class="desc">Radius Histogram</div>
         </div>
     </div>
     
     <div class="responsive">
         <div class="gallery">
-            <img src="{{ url_for('static', filename='images/histplot_texture.svg') }}" class="img-thumbnail" onclick=get_modal(this) alt="Texture Histogram">
+            <img src="{{ url_for('static', filename='images/histplot_texture.svg') }}" class="img-thumbnail" onclick=getModal(this) alt="Texture Histogram">
             <div class="desc">Texture Histogram</div>
         </div>
     </div>
     
     <div class="responsive">
         <div class="gallery">
-            <img src="{{ url_for('static', filename='images/histplot_perimeter.svg') }}" class="img-thumbnail" onclick=get_modal(this) alt="Perimeter Histogram">
+            <img src="{{ url_for('static', filename='images/histplot_perimeter.svg') }}" class="img-thumbnail" onclick=getModal(this) alt="Perimeter Histogram">
             <div class="desc">Perimeter Histogram</div>
         </div>
     </div>
     
     <div class="responsive">
         <div class="gallery">
-            <img src="{{ url_for('static', filename='images/histplot_area.svg') }}" class="img-thumbnail" onclick=get_modal(this) alt="Area Histogram">
+            <img src="{{ url_for('static', filename='images/histplot_area.svg') }}" class="img-thumbnail" onclick=getModal(this) alt="Area Histogram">
             <div class="desc">Area Histogram</div>
         </div>
     </div>
     
     <div class="responsive">
         <div class="gallery">
-            <img src="{{ url_for('static', filename='images/histplot_smoothness.svg') }}" class="img-thumbnail" onclick=get_modal(this) alt="Smoothness Histogram">
+            <img src="{{ url_for('static', filename='images/histplot_smoothness.svg') }}" class="img-thumbnail" onclick=getModal(this) alt="Smoothness Histogram">
             <div class="desc">Smoothness Histogram</div>
         </div>
     </div>
     
     <div class="responsive">
         <div class="gallery">
-            <img src="{{ url_for('static', filename='images/histplot_compactness.svg') }}" class="img-thumbnail" onclick=get_modal(this) alt="Compactness Histogram">
+            <img src="{{ url_for('static', filename='images/histplot_compactness.svg') }}" class="img-thumbnail" onclick=getModal(this) alt="Compactness Histogram">
             <div class="desc">Compactness Histogram</div>
         </div>
     </div>
     
     <div class="responsive">
         <div class="gallery">
-            <img src="{{ url_for('static', filename='images/histplot_concavity.svg') }}" class="img-thumbnail" onclick=get_modal(this) alt="Concavity Histogram">
+            <img src="{{ url_for('static', filename='images/histplot_concavity.svg') }}" class="img-thumbnail" onclick=getModal(this) alt="Concavity Histogram">
             <div class="desc">Concavity Histogram</div>
         </div>
     </div>
     
     <div class="responsive">
         <div class="gallery">
-            <img src="{{ url_for('static', filename='images/histplot_concave_points.svg') }}" class="img-thumbnail" onclick=get_modal(this) alt="Concave Points Histogram">
+            <img src="{{ url_for('static', filename='images/histplot_concave_points.svg') }}" class="img-thumbnail" onclick=getModal(this) alt="Concave Points Histogram">
             <div class="desc">Concave Points Histogram</div>
         </div>
     </div>
     
     <div class="responsive">
         <div class="gallery">
-            <img src="{{ url_for('static', filename='images/histplot_symmetry.svg') }}" class="img-thumbnail" onclick=get_modal(this) alt="Symmetry Histogram">
+            <img src="{{ url_for('static', filename='images/histplot_symmetry.svg') }}" class="img-thumbnail" onclick=getModal(this) alt="Symmetry Histogram">
             <div class="desc">Symmetry Histogram</div>
         </div>
     </div>
     
     <div class="responsive">
         <div class="gallery">
-            <img src="{{ url_for('static', filename='images/histplot_fractal_dim.svg') }}" class="img-thumbnail" onclick=get_modal(this) alt="Fractal Dimension Histogram">
+            <img src="{{ url_for('static', filename='images/histplot_fractal_dim.svg') }}" class="img-thumbnail" onclick=getModal(this) alt="Fractal Dimension Histogram">
             <div class="desc">Fractal Dimension Histogram</div>
         </div>
     </div>
@@ -256,21 +257,21 @@ pyplot.show();
 <div class="images">
     <div class="responsive">
         <div class="gallery">
-            <img src="{{ url_for('static', filename='images/scatterplot_perimeter_radius.svg') }}" class="img-thumbnail" onclick=get_modal(this) alt="Perimeter v. Radius">
+            <img src="{{ url_for('static', filename='images/scatterplot_perimeter_radius.svg') }}" class="img-thumbnail" onclick=getModal(this) alt="Perimeter v. Radius">
             <div class="desc">Perimeter v. Radius</div>
         </div>
     </div>
     
     <div class="responsive">
         <div class="gallery">
-            <img src="{{ url_for('static', filename='images/scatterplot_concave_points_concavity.svg') }}" class="img-thumbnail" onclick=get_modal(this) alt="Concave Points v. Concavity">
+            <img src="{{ url_for('static', filename='images/scatterplot_concave_points_concavity.svg') }}" class="img-thumbnail" onclick=getModal(this) alt="Concave Points v. Concavity">
             <div class="desc">Concave Points v. Concavity</div>
         </div>
     </div>
     
     <div class="responsive">
         <div class="gallery">
-            <img src="{{ url_for('static', filename='images/scatterplot_compactness_area.svg') }}" class="img-thumbnail" onclick=get_modal(this) alt="Compactness v. Area">
+            <img src="{{ url_for('static', filename='images/scatterplot_compactness_area.svg') }}" class="img-thumbnail" onclick=getModal(this) alt="Compactness v. Area">
             <div class="desc">Compactness v. Area</div>
         </div>
     </div>
@@ -336,7 +337,7 @@ disp_log.plot()
 <div class="images">
     <div class="responsive">
         <div class="gallery">
-            <img src="{{ url_for('static', filename='images/confusion_matrix.svg') }}" class="img-thumbnail" onclick=get_modal(this) alt="Confusion Matrix">
+            <img src="{{ url_for('static', filename='images/confusion_matrix.svg') }}" class="img-thumbnail" onclick=getModal(this) alt="Confusion Matrix">
             <div class="desc">Confusion Matrix</div>
         </div>
     </div>
@@ -392,5 +393,7 @@ print("Cross Validation Average Score: ", scores.mean())
 <img class="modal-content" id="modal-img">
 <div id="caption"></div>
 </div>
+
+
 
 {% endblock %}

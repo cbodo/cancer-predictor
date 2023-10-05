@@ -1,8 +1,13 @@
 'use strict';
 
-function get_modal(img) {
+function closeContents() {
+    let offcanvas = document.getElementById("offcanvasRight");
+    let openCanvas = bootstrap.Offcanvas.getInstance(offcanvas);
+    openCanvas.hide();
+}
+
+function getModal(img) {
     var modal = document.getElementById("modal");
-    var imgUrl = document.getElementById(img.src);
     var modalImg = document.getElementById('modal-img');
     var captionText = document.getElementById("caption");
 
