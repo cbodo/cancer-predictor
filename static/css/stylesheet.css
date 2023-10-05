@@ -15,7 +15,8 @@ ul, li {
 
 body {
 	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-	padding: 0rem;
+	padding: 0;
+    margin: 0;
     color: black;
 }
 
