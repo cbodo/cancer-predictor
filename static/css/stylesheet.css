@@ -66,10 +66,7 @@ div.desc {
     flex-wrap: wrap;
 }
 
-.responsive {
-    padding: 0.5rem;
-    width: 10rem;
-}
+
 
 .modal {
     display: none;
@@ -131,21 +128,3 @@ div.desc {
     cursor: pointer;
   }
   
-  @media only screen and (max-width: 700px) {
-    .responsive {
-    width: 30%;
-    margin: 6px 0;
-    }
-}
-
-@media only screen and (max-width: 500px) {
-    .responsive {
-    width: 15%;
-    }
-}
-
-  @media only screen and (max-width: 700px){
-    .modal-content {
-      width: 90%;
-    }
-  }
