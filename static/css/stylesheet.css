@@ -1,6 +1,7 @@
+/* General */
+
 a {
 	text-decoration: none;
-	/* color: black; */
 }
 
 a:hover {
@@ -9,23 +10,28 @@ a:hover {
     text-decoration-thickness: 0.25rem;
 }
 
+body {
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+	padding: 0;
+  margin: 0;
+  color: black;
+}
+
+.content { padding: 2rem; }
+
+.footer { padding: 2rem; }
+
 ul, li {
 	list-style: none;
 }
 
-body {
-	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-	padding: 0;
-    margin: 0;
-    color: black;
-}
-
-.content { padding: 2rem; }
-.footer { padding: 2rem; }
+/* Form boxes */
 
 input {
     text-align: right;
 }
+
+/* Code example boxes */
 
 pre {
     padding: 1rem;
@@ -36,16 +42,14 @@ pre i {
     color: slategray;
 }
 
-div.desc {
-    padding: 0.5rem;
-    color: darkslategray;
-    text-align: center;
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 0.6rem;
-}
+/* Image gallery */
 
-* {
-    box-sizing: border-box;
+div.desc {
+  padding: 0.5rem;
+  color: darkslategray;
+  text-align: center;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 0.6rem;
 }
 
 .images {
