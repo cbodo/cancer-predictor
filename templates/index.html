@@ -35,12 +35,12 @@
             <input type="text" 
                     class="form-control form-control-lg"
                     id="{{ textbox.name }}" 
-                    value="{{ '%0.8f' % textbox.value|float }}" 
+                    value="{{ '%0.4f' % textbox.value|float }}" 
                     min="{{ textbox.min_value }}"
                     max="{{ textbox.max_value }}"
                     disabled>
           </div>
-          <div class="text-end fs-6 text-secondary">A number between {{ '%0.8f' % textbox.min|float }} and {{ '%0.8f' % textbox.max|float }}.</div>
+          <div class="text-end fs-6 text-secondary">A number between {{ '%0.4f' % textbox.min|float }} and {{ '%0.4f' % textbox.max|float }}.</div>
         </div>
       {% endfor %}
   </form>
