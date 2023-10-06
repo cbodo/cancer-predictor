@@ -1,5 +1,10 @@
 'use strict';
 
+window.onload = function() {
+    var currentDate = new Date();
+    document.getElementById('current-year').innterHTML = currentDate.getFullYear();
+}
+
 function closeContents() {
     let offcanvas = document.getElementById("offcanvasRight");
     let openCanvas = bootstrap.Offcanvas.getInstance(offcanvas);

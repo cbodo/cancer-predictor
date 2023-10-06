@@ -21,6 +21,7 @@ body {
 }
 
 .content { padding: 2rem; }
+.footer { padding: 2rem; }
 
 input {
     text-align: right;
